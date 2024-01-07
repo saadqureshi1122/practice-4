@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const videoWatchedSchema = new mongoose.Schema({
   video: { type: mongoose.Schema.Types.ObjectId, ref: "Video", required: true },
@@ -74,7 +74,7 @@ userSchema.methods.generateRefreshToken = function () {
   const payload = {
     userId: this._id,
   };
-  const secretKey = process.env.REFRESH_TOKEN_SECRET; 
+  const secretKey = process.env.REFRESH_TOKEN_SECRET;
   const options = {
     expiresIn: process.env.REFRESH_TOKEN_EXPIRY, // Token expiration time
   };
