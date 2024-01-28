@@ -54,32 +54,29 @@ userSchema.methods.isPasswordCorrect = async function (candidatePassword) {
 };
 
 userSchema.methods.generateAccessToken = function () {
-  const payload = {
-    userId: this._id,
-    email: this.email,
-    username: this.username,
-    fullName: this.fullName,
-    // ... other user-related data you want to include in the token
-  };
-
-  const secretKey = process.env.ACCESS_TOKEN_SECRET; // Replace with your secret key
-  const options = {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-  };
-  // Generate and return the access token
-  return jwt.sign(payload, secretKey, options);
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+      username: this.username,
+      fullName: this.fullName,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+    }
+  );
 };
-
 userSchema.methods.generateRefreshToken = function () {
-  const payload = {
-    userId: this._id,
-  };
-  const secretKey = process.env.REFRESH_TOKEN_SECRET;
-  const options = {
-    expiresIn: process.env.REFRESH_TOKEN_EXPIRY, // Token expiration time
-  };
-  // Generate and return the access token
-  return jwt.sign(payload, secretKey, options);
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+    }
+  );
 };
 
 export const User = mongoose.model("User", userSchema);
